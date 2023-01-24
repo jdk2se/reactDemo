@@ -5,13 +5,18 @@ import {BuildOptions} from "./types/config";
 export default function (options: BuildOptions): webpack.RuleSetRule[] {
     const {isDev} = options;
 
+    const svgLoader = {
+        test: /\.svg$/,
+        use: ['@svgr/webpack']
+    }
+
     const tsLoader = {
         test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/,
     };
 
-    const cssLoaders = {
+    const cssLoader = {
         test: /\.s[ac]ss$/i,
         use: [
             // Creates `style` nodes from JS strings
@@ -31,8 +36,19 @@ export default function (options: BuildOptions): webpack.RuleSetRule[] {
         ],
     };
 
+    const fileLoader = {
+        test: /\.(png|jpe?g|gif|woff2|woff)$/i,
+        use: [
+            {
+                loader: 'file-loader'
+            }
+        ]
+    }
+
     return [
+        fileLoader,
+        svgLoader,
         tsLoader,
-        cssLoaders,
-    ];
+        cssLoader,
+    ]
 }
